@@ -54,7 +54,7 @@ class JenkinsCdkStack(Stack):
 
         container_definition = task_definition.add_container(
             app_name,
-            image=ecs.ContainerImage.from_registry("jenkins/jenkins:lts"),
+            image=ecs.ContainerImage.from_registry("jenkins/jenkins:2.497"),
             logging=ecs.LogDrivers.aws_logs(stream_prefix="jenkins"),
             port_mappings=[ecs.PortMapping(container_port=8080)],
         )

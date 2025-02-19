@@ -1,58 +1,73 @@
+# Jenkins CDK Stack
 
-# Welcome to your CDK Python project!
+This project includes a CDK stack to deploy a Jenkins server using AWS Fargate and EFS. The stack sets up the following resources:
 
-This is a blank project for CDK development with Python.
+- An ECS cluster.
+- An EFS file system with an access point.
+- A Fargate task definition with a Jenkins container.
+- A Fargate service to run the Jenkins task.
+- An Application Load Balancer to expose Jenkins.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+The Jenkins home directory is stored on the EFS file system, ensuring data persistence across container restarts.
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+## CDK Constructs Diagram
 
-To manually create a virtualenv on MacOS and Linux:
-
-```
-$ python3 -m venv .venv
-```
-
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
-
-```
-$ source .venv/bin/activate
-```
-
-If you are a Windows platform, you would activate the virtualenv like this:
-
-```
-% .venv\Scripts\activate.bat
+```mermaid
+graph TD;
+    A[ECS Cluster] --> B[Fargate Service]
+    B --> C[Jenkins Container]
+    B --> D[EFS File System]
+    D --> E[Access Point]
+    F[Application Load Balancer] --> B
+    F --> G[Listener]
+    G --> H[Target Group]
+    H --> B
 ```
 
-Once the virtualenv is activated, you can install the required dependencies.
+## Setup and Deployment
 
-```
-$ pip install -r requirements.txt
-```
+To set up the virtual environment, install the required dependencies, and deploy the stack using CDK, follow these steps:
 
-At this point you can now synthesize the CloudFormation template for this code.
+1. Create a virtual environment:
 
-```
-$ cdk synth
-```
+    On MacOS and Linux:
+    ```
+    $ python3 -m venv .venv
+    ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+    On Windows:
+    ```
+    > python -m venv .venv
+    ```
 
-## Useful commands
+2. Activate the virtual environment:
+
+    On MacOS and Linux:
+    ```
+    $ source .venv/bin/activate
+    ```
+
+    On Windows:
+    ```
+    > .venv\Scripts\activate.bat
+    ```
+
+3. Install the required dependencies:
+    ```
+    $ pip install -r requirements.txt
+    ```
+
+4. Deploy the CDK stack:
+    ```
+    $ cdk deploy
+    ```
+
+This will deploy the Jenkins server using AWS Fargate and EFS as described in the Jenkins CDK Stack section.
+
+## Other Useful commands
 
  * `cdk ls`          list all stacks in the app
  * `cdk synth`       emits the synthesized CloudFormation template
  * `cdk deploy`      deploy this stack to your default AWS account/region
  * `cdk diff`        compare deployed stack with current state
  * `cdk docs`        open CDK documentation
-
-Enjoy!

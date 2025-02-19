@@ -8,6 +8,7 @@ from aws_cdk import (
     aws_ecs as ecs,
     aws_efs as efs,
     aws_elasticloadbalancingv2 as elbv2,
+    aws_iam as iam,
 )
 from constructs import Construct
 
@@ -39,6 +40,18 @@ class JenkinsCdkStack(Stack):
 
         task_definition = ecs.FargateTaskDefinition(
             self, f"{app_name}-task", family=app_name, cpu=1024, memory_limit_mib=2048
+        )
+
+        # this was the missing piece from online examples
+        task_definition.add_to_task_role_policy(
+            iam.PolicyStatement(
+                effect=iam.Effect.ALLOW,
+                actions=[
+                    "elasticfilesystem:ClientMount",
+                    "elasticfilesystem:ClientWrite",
+                ],
+                resources=[fs.file_system_arn],
+            )
         )
 
         task_definition.add_volume(

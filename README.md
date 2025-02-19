@@ -10,20 +10,6 @@ This project includes a CDK stack to deploy a Jenkins server using AWS Fargate a
 
 The Jenkins home directory is stored on the EFS file system, ensuring data persistence across container restarts.
 
-## CDK Constructs Diagram
-
-```mermaid
-graph TD;
-    A[ECS Cluster] --> B[Fargate Service]
-    B --> C[Jenkins Container]
-    B --> D[EFS File System]
-    D --> E[Access Point]
-    F[Application Load Balancer] --> B
-    F --> G[Listener]
-    G --> H[Target Group]
-    H --> B
-```
-
 ## Setup and Deployment
 
 To set up the virtual environment, install the required dependencies, and deploy the stack using CDK, follow these steps:
